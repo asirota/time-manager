@@ -15,3 +15,6 @@ TimeAddertest.java consists of a main function that checks each test case define
 
 ## Testresults.csv
 Testresults.csv contains each test case, as well as the corresponding results achieved by `AddMinutes` and the manual calculation.
+
+## blueprint 2.json
+blueprint 2.json is an Integromat scenario that demonstrates equivalent functionality. It is a different approach to accomplishing visually what is normally done in code. 
