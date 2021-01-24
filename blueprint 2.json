@@ -1,0 +1,650 @@
+{
+    "name": "Time Adder",
+    "flow": [
+        {
+            "id": 1,
+            "module": "regexp:Parser",
+            "version": 1,
+            "parameters": {
+                "pattern": "(\\d*):(\\d*)\\s*(am|pm|AM|PM)",
+                "global": false,
+                "sensitive": false,
+                "multiline": false,
+                "singleline": false,
+                "continueWhenNoRes": true
+            },
+            "mapper": {
+                "text": "11:13 pm"
+            },
+            "metadata": {
+                "designer": {
+                    "x": 0,
+                    "y": 150,
+                    "name": "Set time to convert and parse"
+                },
+                "parameters": [
+                    {
+                        "name": "pattern",
+                        "type": "text",
+                        "required": true,
+                        "label": "Pattern"
+                    },
+                    {
+                        "name": "global",
+                        "type": "boolean",
+                        "label": "Global match",
+                        "required": true
+                    },
+                    {
+                        "name": "sensitive",
+                        "type": "boolean",
+                        "label": "Case sensitive",
+                        "required": true
+                    },
+                    {
+                        "name": "multiline",
+                        "type": "boolean",
+                        "label": "Multiline",
+                        "required": true
+                    },
+                    {
+                        "name": "singleline",
+                        "type": "boolean",
+                        "label": "Singleline",
+                        "required": true
+                    },
+                    {
+                        "name": "continueWhenNoRes",
+                        "label": "Continue the execution of the route even if the module finds no matches",
+                        "type": "boolean",
+                        "required": true
+                    }
+                ],
+                "expect": [
+                    {
+                        "name": "text",
+                        "type": "text",
+                        "label": "Text"
+                    }
+                ],
+                "interface": [
+                    {
+                        "type": "text",
+                        "name": "$1",
+                        "label": "$1"
+                    },
+                    {
+                        "type": "text",
+                        "name": "$2",
+                        "label": "$2"
+                    },
+                    {
+                        "type": "text",
+                        "name": "$3",
+                        "label": "$3"
+                    }
+                ]
+            }
+        },
+        {
+            "id": 3,
+            "module": "util:SetVariables",
+            "version": 1,
+            "parameters": {},
+            "filter": {
+                "name": "",
+                "conditions": [
+                    [
+                        {
+                            "a": "{{1.`$1`}}",
+                            "b": "1",
+                            "o": "number:greaterorequal"
+                        },
+                        {
+                            "a": "{{1.`$1`}}",
+                            "b": "12",
+                            "o": "number:lessorequal"
+                        },
+                        {
+                            "a": "{{1.`$2`}}",
+                            "b": "0",
+                            "o": "number:greaterorequal"
+                        },
+                        {
+                            "a": "{{1.`$2`}}",
+                            "b": "59",
+                            "o": "number:lessorequal"
+                        }
+                    ]
+                ]
+            },
+            "mapper": {
+                "scope": "roundtrip",
+                "variables": [
+                    {
+                        "name": "Hour",
+                        "value": "{{1.`$1`}}"
+                    },
+                    {
+                        "name": "Minute",
+                        "value": "{{1.`$2`}}"
+                    },
+                    {
+                        "name": "Meridiem",
+                        "value": "{{1.`$3`}}"
+                    }
+                ]
+            },
+            "metadata": {
+                "designer": {
+                    "x": 300,
+                    "y": 150,
+                    "name": "Set component time variables"
+                },
+                "restore": {
+                    "scope": {
+                        "label": "One cycle"
+                    },
+                    "variables": {
+                        "items": [
+                            "undefined",
+                            "undefined",
+                            "undefined"
+                        ]
+                    }
+                },
+                "expect": [
+                    {
+                        "name": "variables",
+                        "spec": [
+                            {
+                                "name": "name",
+                                "type": "text",
+                                "label": "Variable name",
+                                "required": true
+                            },
+                            {
+                                "name": "value",
+                                "type": "any",
+                                "label": "Variable value"
+                            }
+                        ],
+                        "type": "array",
+                        "label": "Variables"
+                    },
+                    {
+                        "name": "scope",
+                        "type": "select",
+                        "label": "Variable lifetime",
+                        "required": true,
+                        "validate": {
+                            "enum": [
+                                "roundtrip",
+                                "execution"
+                            ]
+                        }
+                    }
+                ],
+                "interface": [
+                    {
+                        "name": "Hour",
+                        "type": "any",
+                        "label": "Hour"
+                    },
+                    {
+                        "name": "Minute",
+                        "type": "any",
+                        "label": "Minute"
+                    },
+                    {
+                        "name": "Meridiem",
+                        "type": "any",
+                        "label": "Meridiem"
+                    }
+                ]
+            }
+        },
+        {
+            "id": 4,
+            "module": "util:SetVariable2",
+            "version": 1,
+            "parameters": {},
+            "mapper": {
+                "name": "Minutes to add",
+                "scope": "roundtrip",
+                "value": "1200"
+            },
+            "metadata": {
+                "designer": {
+                    "x": 600,
+                    "y": 150,
+                    "name": "Set minutes to add"
+                },
+                "restore": {
+                    "scope": {
+                        "label": "One cycle"
+                    }
+                },
+                "expect": [
+                    {
+                        "name": "name",
+                        "label": "Variable name",
+                        "type": "text",
+                        "required": true
+                    },
+                    {
+                        "name": "scope",
+                        "label": "Variable lifetime",
+                        "type": "select",
+                        "required": true,
+                        "validate": {
+                            "enum": [
+                                "roundtrip",
+                                "execution"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "value",
+                        "label": "Variable value",
+                        "type": "any"
+                    }
+                ],
+                "interface": [
+                    {
+                        "name": "Minutes to add",
+                        "label": "Minutes to add",
+                        "type": "any"
+                    }
+                ]
+            }
+        },
+        {
+            "id": 5,
+            "module": "util:SetVariables",
+            "version": 1,
+            "parameters": {},
+            "mapper": {
+                "scope": "roundtrip",
+                "variables": [
+                    {
+                        "name": "Time in seconds",
+                        "value": "{{1.`$1` * 3600 + 1.`$2` * 60}}"
+                    },
+                    {
+                        "name": "minutes to add in seconds",
+                        "value": "{{4.`Minutes to add` * 60}}"
+                    }
+                ]
+            },
+            "metadata": {
+                "designer": {
+                    "x": 900,
+                    "y": 150,
+                    "name": "Convert time to seconds"
+                },
+                "restore": {
+                    "scope": {
+                        "label": "One cycle"
+                    },
+                    "variables": {
+                        "items": [
+                            "undefined",
+                            "undefined"
+                        ]
+                    }
+                },
+                "expect": [
+                    {
+                        "name": "variables",
+                        "spec": [
+                            {
+                                "name": "name",
+                                "type": "text",
+                                "label": "Variable name",
+                                "required": true
+                            },
+                            {
+                                "name": "value",
+                                "type": "any",
+                                "label": "Variable value"
+                            }
+                        ],
+                        "type": "array",
+                        "label": "Variables"
+                    },
+                    {
+                        "name": "scope",
+                        "type": "select",
+                        "label": "Variable lifetime",
+                        "required": true,
+                        "validate": {
+                            "enum": [
+                                "roundtrip",
+                                "execution"
+                            ]
+                        }
+                    }
+                ],
+                "interface": [
+                    {
+                        "name": "Time in seconds",
+                        "type": "any",
+                        "label": "Time in seconds"
+                    },
+                    {
+                        "name": "minutes to add in seconds",
+                        "type": "any",
+                        "label": "minutes to add in seconds"
+                    }
+                ]
+            }
+        },
+        {
+            "id": 6,
+            "module": "builtin:BasicRouter",
+            "version": 1,
+            "mapper": null,
+            "metadata": {
+                "designer": {
+                    "x": 1200,
+                    "y": 150
+                }
+            },
+            "routes": [
+                {
+                    "flow": [
+                        {
+                            "id": 7,
+                            "module": "util:SetVariable2",
+                            "version": 1,
+                            "parameters": {},
+                            "filter": {
+                                "name": "PM",
+                                "conditions": [
+                                    [
+                                        {
+                                            "a": "{{3.Meridiem}}",
+                                            "b": "pm",
+                                            "o": "text:equal:ci"
+                                        },
+                                        {
+                                            "a": "{{3.Hour}}",
+                                            "b": "12",
+                                            "o": "number:notequal"
+                                        }
+                                    ]
+                                ]
+                            },
+                            "mapper": {
+                                "name": "converted time",
+                                "scope": "roundtrip",
+                                "value": "{{5.`Time in seconds` + 43200 + 5.`minutes to add in seconds`}}"
+                            },
+                            "metadata": {
+                                "designer": {
+                                    "x": 1500,
+                                    "y": 0,
+                                    "name": "Deal with PM condition"
+                                },
+                                "restore": {
+                                    "scope": {
+                                        "label": "One cycle"
+                                    }
+                                },
+                                "expect": [
+                                    {
+                                        "name": "name",
+                                        "type": "text",
+                                        "label": "Variable name",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "scope",
+                                        "type": "select",
+                                        "label": "Variable lifetime",
+                                        "required": true,
+                                        "validate": {
+                                            "enum": [
+                                                "roundtrip",
+                                                "execution"
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "name": "value",
+                                        "type": "any",
+                                        "label": "Variable value"
+                                    }
+                                ],
+                                "interface": [
+                                    {
+                                        "name": "converted time",
+                                        "type": "any",
+                                        "label": "converted time"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "id": 9,
+                            "module": "util:SetVariables",
+                            "version": 1,
+                            "parameters": {},
+                            "mapper": {
+                                "variables": [
+                                    {
+                                        "name": "New hour and time",
+                                        "value": "{{floor(7.`converted time` / 3600 - 12)}}:{{(7.`converted time` % 3600 / 60)}} PM"
+                                    }
+                                ],
+                                "scope": "roundtrip"
+                            },
+                            "metadata": {
+                                "designer": {
+                                    "x": 1800,
+                                    "y": 0
+                                },
+                                "restore": {
+                                    "variables": {
+                                        "items": [
+                                            "undefined"
+                                        ]
+                                    },
+                                    "scope": {
+                                        "label": "One cycle"
+                                    }
+                                },
+                                "expect": [
+                                    {
+                                        "name": "variables",
+                                        "label": "Variables",
+                                        "type": "array",
+                                        "spec": [
+                                            {
+                                                "name": "name",
+                                                "label": "Variable name",
+                                                "type": "text",
+                                                "required": true
+                                            },
+                                            {
+                                                "name": "value",
+                                                "label": "Variable value",
+                                                "type": "any"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "name": "scope",
+                                        "label": "Variable lifetime",
+                                        "type": "select",
+                                        "required": true,
+                                        "validate": {
+                                            "enum": [
+                                                "roundtrip",
+                                                "execution"
+                                            ]
+                                        }
+                                    }
+                                ],
+                                "interface": [
+                                    {
+                                        "name": "New hour and time",
+                                        "label": "New hour and time",
+                                        "type": "any"
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                },
+                {
+                    "flow": [
+                        {
+                            "id": 8,
+                            "module": "util:SetVariable2",
+                            "version": 1,
+                            "parameters": {},
+                            "mapper": {
+                                "name": "Converted time am",
+                                "scope": "roundtrip",
+                                "value": "{{5.`Time in seconds` + 5.`minutes to add in seconds`}}"
+                            },
+                            "metadata": {
+                                "designer": {
+                                    "x": 1500,
+                                    "y": 300,
+                                    "name": "Deal with AM condition"
+                                },
+                                "restore": {
+                                    "scope": {
+                                        "label": "One cycle"
+                                    }
+                                },
+                                "expect": [
+                                    {
+                                        "name": "name",
+                                        "label": "Variable name",
+                                        "type": "text",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "scope",
+                                        "label": "Variable lifetime",
+                                        "type": "select",
+                                        "required": true,
+                                        "validate": {
+                                            "enum": [
+                                                "roundtrip",
+                                                "execution"
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "name": "value",
+                                        "label": "Variable value",
+                                        "type": "any"
+                                    }
+                                ],
+                                "interface": [
+                                    {
+                                        "name": "Converted time am",
+                                        "label": "Converted time am",
+                                        "type": "any"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "id": 10,
+                            "module": "util:SetVariables",
+                            "version": 1,
+                            "parameters": {},
+                            "mapper": {
+                                "variables": [
+                                    {
+                                        "name": "New hour and time",
+                                        "value": "{{floor(8.`Converted time am` / 3600)}}:{{(8.`Converted time am` % 3600 / 60)}} AM"
+                                    }
+                                ],
+                                "scope": "roundtrip"
+                            },
+                            "metadata": {
+                                "designer": {
+                                    "x": 1800,
+                                    "y": 300
+                                },
+                                "restore": {
+                                    "variables": {
+                                        "items": [
+                                            "undefined"
+                                        ]
+                                    },
+                                    "scope": {
+                                        "label": "One cycle"
+                                    }
+                                },
+                                "expect": [
+                                    {
+                                        "name": "variables",
+                                        "label": "Variables",
+                                        "type": "array",
+                                        "spec": [
+                                            {
+                                                "name": "name",
+                                                "label": "Variable name",
+                                                "type": "text",
+                                                "required": true
+                                            },
+                                            {
+                                                "name": "value",
+                                                "label": "Variable value",
+                                                "type": "any"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "name": "scope",
+                                        "label": "Variable lifetime",
+                                        "type": "select",
+                                        "required": true,
+                                        "validate": {
+                                            "enum": [
+                                                "roundtrip",
+                                                "execution"
+                                            ]
+                                        }
+                                    }
+                                ],
+                                "interface": [
+                                    {
+                                        "name": "New hour and time",
+                                        "label": "New hour and time",
+                                        "type": "any"
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "metadata": {
+        "version": 1,
+        "scenario": {
+            "roundtrips": 1,
+            "shatter": false,
+            "maxErrors": 3,
+            "autoCommit": false,
+            "sequential": false,
+            "confidential": false,
+            "dataloss": false,
+            "dlq": true
+        },
+        "designer": {
+            "orphans": []
+        },
+        "zone": "eu1.integromat.com"
+    }
+}
