@@ -10,8 +10,8 @@ TimeAdder.java contains the `AddMinutes` method as well as a `main` function for
 
 **Outputs:** String holding the new time in the form of "[H]H:MM {AM|PM}".
 
-## Test.java
+## TimeAddertests.java
 Test.java consists of a main function that checks each test case defined in Tests.csv by using an `assert` for each case.
 
-## Tests.csv
-Tests.csv contains each test case, as well as the corresponding results achieved by `AddMinutes` and the manual calculation.
+## Testresults.csv
+Testresults.csv contains each test case, as well as the corresponding results achieved by `AddMinutes` and the manual calculation.
