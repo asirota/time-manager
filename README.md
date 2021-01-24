@@ -18,3 +18,4 @@ Testresults.csv contains each test case, as well as the corresponding results ac
 
 ## blueprint 2.json
 blueprint 2.json is an [Integromat](https://integromat.com) scenario that demonstrates equivalent functionality. It is a different approach to accomplishing visually what is normally done in code. 
+Integromat scenario blueprints can be imported easily to run and execute. [See section 13 in help documentation.](https://support.integromat.com/hc/en-us/articles/360013785320-Scenario-Editor)
